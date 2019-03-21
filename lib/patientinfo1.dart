@@ -17,7 +17,8 @@ class _PatientInfo1State extends State<PatientInfo1> {
   String sex;
   String agestring;
 
-  double age;
+  int age;
+  double agefull;
 
   int _radioValue = 0;
 
@@ -41,23 +42,19 @@ class _PatientInfo1State extends State<PatientInfo1> {
     final DateTime picked = await showDatePicker(
         context: context,
         initialDate: selectedDate,
-        firstDate: DateTime(2015, 8),
+        firstDate: DateTime(1900, 8),
         lastDate: DateTime(2101));
     if (picked != null && picked != selectedDate)
       setState(() {
         selectedDate = picked;
-        calculateAge();
+        agefull = ((dateNow.year + (dateNow.month/12)) - (selectedDate.year + (selectedDate.month/12))).toDouble();
+        age = agefull.toInt();
+        ageController.text = '$age';
       });
   }
 
   _printLatestValue() {
     print(age);
-  }
-
-  void calculateAge() {
-    setState(() {
-      age = (dateNow.year - selectedDate.year).toDouble();
-    });
   }
 
   final nameController = TextEditingController();
@@ -201,7 +198,9 @@ class _PatientInfo1State extends State<PatientInfo1> {
                 child: TextField(
                   controller: ageController,
                   onChanged: (text) {
-                    agestring = text;
+                    setState(() {
+                      agestring = text;
+                    });
                   },
                   keyboardType: TextInputType.text,
                   decoration: InputDecoration(

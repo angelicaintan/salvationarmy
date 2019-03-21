@@ -27,13 +27,14 @@ class _PatientInfo3State extends State<PatientInfo3> {
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
                 child: TextField(
-                  keyboardType: TextInputType.text,
+                  keyboardType: TextInputType.multiline,
                   decoration: InputDecoration(
                       labelText: '',
                       labelStyle:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8))),
+                  maxLines: null
                 ),
               ),
               Padding(
@@ -51,6 +52,7 @@ class _PatientInfo3State extends State<PatientInfo3> {
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8))),
+                  maxLines: null
                 ),
               ),
               Padding(
@@ -67,6 +69,7 @@ class _PatientInfo3State extends State<PatientInfo3> {
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8))),
+                  maxLines: null
                 ),
               ),
               RaisedButton(

@@ -43,13 +43,11 @@ class _PatientInfo2State extends State<PatientInfo2> {
               'Heart Rate',
               style: TextStyle(fontSize: 12),
             ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.6,
-              height: MediaQuery.of(context).size.height * 0.2,
+            Expanded(
               child: TextField(
                 controller: heartrateController,
-                  onChanged: (text) {
-                    heartrate = text;
+                onChanged: (text) {
+                  heartrate = text;
                 },
                 keyboardType: TextInputType.text,
                 decoration: InputDecoration(
@@ -65,14 +63,12 @@ class _PatientInfo2State extends State<PatientInfo2> {
               'Blood Pressure',
               style: TextStyle(fontSize: 12),
             ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.6,
-              height: MediaQuery.of(context).size.height * 0.2,
+            Expanded(
               child: TextField(
                 controller: bloodpressureController,
-                  onChanged: (text) {
-                    bloodpressure = text;
-                  },
+                onChanged: (text) {
+                  bloodpressure = text;
+                },
                 keyboardType: TextInputType.text,
                 decoration: InputDecoration(
                     labelText: 'E.g. 120/80 ',
@@ -87,14 +83,12 @@ class _PatientInfo2State extends State<PatientInfo2> {
               'Blood Glucose',
               style: TextStyle(fontSize: 12),
             ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.6,
-              height: MediaQuery.of(context).size.height * 0.2,
+            Expanded(
               child: TextField(
                 controller: bloodglucoseController,
-                  onChanged: (text) {
-                    bloodglucose = text;
-                  },
+                onChanged: (text) {
+                  bloodglucose = text;
+                },
                 keyboardType: TextInputType.text,
                 decoration: InputDecoration(
                     labelText: 'E.g. 4.5 mmol/L',
@@ -102,21 +96,19 @@ class _PatientInfo2State extends State<PatientInfo2> {
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8))),
               ),
-            ),
+            )
           ]),
           Row(children: <Widget>[
             Text(
               'Body Height',
               style: TextStyle(fontSize: 12),
             ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.6,
-              height: MediaQuery.of(context).size.height * 0.2,
+            Expanded(
               child: TextField(
                 controller: bodyheightController,
-                  onChanged: (text) {
-                    bodyheight = text;
-                  },
+                onChanged: (text) {
+                  bodyheight = text;
+                },
                 keyboardType: TextInputType.text,
                 decoration: InputDecoration(
                     labelText: 'E.g. 170 cm',
@@ -131,14 +123,12 @@ class _PatientInfo2State extends State<PatientInfo2> {
               'Body Weight',
               style: TextStyle(fontSize: 12),
             ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.6,
-              height: MediaQuery.of(context).size.height * 0.2,
+            Expanded(
               child: TextField(
                 controller: bodyweightController,
-                  onChanged: (text) {
-                    bodyweight = text;
-                  },
+                onChanged: (text) {
+                  bodyweight = text;
+                },
                 keyboardType: TextInputType.text,
                 decoration: InputDecoration(
                     labelText: 'E.g. 70 kg',
@@ -153,14 +143,12 @@ class _PatientInfo2State extends State<PatientInfo2> {
               'BMI',
               style: TextStyle(fontSize: 12),
             ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.6,
-              height: MediaQuery.of(context).size.height * 0.2,
+            Expanded(
               child: TextField(
                 controller: bmiController,
-                  onChanged: (text) {
-                    bmi = text;
-                  },
+                onChanged: (text) {
+                  bmi = text;
+                },
                 keyboardType: TextInputType.text,
                 decoration: InputDecoration(
                     labelText: 'E.g. ',
@@ -175,14 +163,12 @@ class _PatientInfo2State extends State<PatientInfo2> {
               'Respiration Rate',
               style: TextStyle(fontSize: 12),
             ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.6,
-              height: MediaQuery.of(context).size.height * 0.2,
+            Expanded(
               child: TextField(
                 controller: respirationrateController,
-                  onChanged: (text) {
-                    respirationrate = text;
-                  },
+                onChanged: (text) {
+                  respirationrate = text;
+                },
                 keyboardType: TextInputType.text,
                 decoration: InputDecoration(
                     labelText: 'E.g. ',
@@ -237,37 +223,37 @@ class _PatientInfo2State extends State<PatientInfo2> {
             child: Text('Additional Information'),
           ),
           SizedBox(
-              width: MediaQuery.of(context).size.width * 0.6,
-              height: MediaQuery.of(context).size.height * 0.2,
-              child: TextField(
-                keyboardType: TextInputType.text,
-                decoration: InputDecoration(
-                    labelText: 'E.g. Lost a lot of weight recently',
-                    labelStyle: TextStyle(fontSize: 12),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8))),
-              ),
+            width: MediaQuery.of(context).size.width * 0.6,
+            height: MediaQuery.of(context).size.height * 0.2,
+            child: TextField(
+              keyboardType: TextInputType.text,
+              decoration: InputDecoration(
+                  labelText: 'E.g. Lost a lot of weight recently',
+                  labelStyle: TextStyle(fontSize: 12),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8))),
             ),
-          RaisedButton(
-            child: Text('Next'),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => PatientInfo3()),
-              );
-            },
           ),
+          RaisedButton(
+                child: Text('Next'),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => PatientInfo3()),
+                  );
+                },
+              ),
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 8),
-          ),
-          RaisedButton(
-            child: Text('?'),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => HelpPatientInfo2()),
-              );
-            },
+            padding: EdgeInsets.symmetric(vertical: 8, horizontal: 5),
+            child: RaisedButton(
+              child: Text('?'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => HelpPatientInfo2()),
+                );
+              },
+            ),
           ),
         ],
       ),
