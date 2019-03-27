@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'helppatientinfo1.dart';
 import 'patientinfo2.dart';
 import 'newrecord.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PatientInfo1 extends StatefulWidget {
   @override
@@ -9,29 +11,47 @@ class PatientInfo1 extends StatefulWidget {
 }
 
 class _PatientInfo1State extends State<PatientInfo1> {
-  String gender;
   String name;
   String contact;
-  String cssa;
+  bool cssa;
   String hkid;
-  String sex;
+  String gender;
+  String birthday = ' ';
   String agestring;
-
   int age;
+
   double agefull;
 
-  int _radioValue = 0;
+  int _genderValue = -1;
+  int _cssaValue = -1;
 
   void _genderChange(int value) {
     setState(() {
-      _radioValue = value;
-      sex = 'female';
+      _genderValue = value;
+
+      switch (_genderValue) {
+        case 0:
+          gender = 'female';
+          break;
+        case 1:
+          gender = 'male';
+          break;
+      }
     });
   }
 
   void _cssaChange(int value) {
     setState(() {
-      _radioValue = value;
+      _cssaValue = value;
+
+      switch (_cssaValue) {
+        case 0:
+          cssa = true;
+          break;
+        case 1:
+          cssa = false;
+          break;
+      }
     });
   }
 
@@ -47,10 +67,26 @@ class _PatientInfo1State extends State<PatientInfo1> {
     if (picked != null && picked != selectedDate)
       setState(() {
         selectedDate = picked;
-        agefull = ((dateNow.year + (dateNow.month/12)) - (selectedDate.year + (selectedDate.month/12))).toDouble();
+        birthday = selectedDate.toString();
+        agefull = ((dateNow.year + (dateNow.month / 12)) -
+                (selectedDate.year + (selectedDate.month / 12)))
+            .toDouble();
         age = agefull.toInt();
         ageController.text = '$age';
       });
+  }
+
+  var records = Firestore.instance.collection('Records').document();
+
+  _persistPatientInfo1() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('name', name);
+    prefs.setString('gender', gender);
+    prefs.setString('contact', contact);
+    prefs.setBool('cssa', cssa);
+    prefs.setString('HKID', hkid);
+    prefs.setString('birthday', birthday);
+    prefs.setString('age', agestring);
   }
 
   _printLatestValue() {
@@ -61,6 +97,7 @@ class _PatientInfo1State extends State<PatientInfo1> {
   final contactController = TextEditingController();
   final hkidController = TextEditingController();
   final ageController = TextEditingController();
+  final birthdayController = TextEditingController();
 
   @override
   void initState() {
@@ -74,9 +111,9 @@ class _PatientInfo1State extends State<PatientInfo1> {
         appBar: AppBar(
           title: Text('Personal Information'),
         ),
-        body: Container(
-          width: MediaQuery.of(context).size.width,
-          child: Column(
+        body: ListView(
+          children: <Widget> [
+          Column(
             children: <Widget>[
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 5, horizontal: 24),
@@ -103,7 +140,7 @@ class _PatientInfo1State extends State<PatientInfo1> {
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
                     child: Radio(
-                      groupValue: 1,
+                      groupValue: _genderValue,
                       value: 0,
                       onChanged: _genderChange,
                     ),
@@ -115,8 +152,8 @@ class _PatientInfo1State extends State<PatientInfo1> {
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
                     child: Radio(
-                      groupValue: 1,
-                      value: 0,
+                      groupValue: _genderValue,
+                      value: 1,
                       onChanged: _genderChange,
                     ),
                   ),
@@ -163,7 +200,7 @@ class _PatientInfo1State extends State<PatientInfo1> {
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
                     child: Radio(
-                      groupValue: 1,
+                      groupValue: _cssaValue,
                       value: 0,
                       onChanged: _cssaChange,
                     ),
@@ -175,8 +212,8 @@ class _PatientInfo1State extends State<PatientInfo1> {
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
                     child: Radio(
-                      groupValue: 1,
-                      value: 0,
+                      groupValue: _cssaValue,
+                      value: 1,
                       onChanged: _cssaChange,
                     ),
                   ),
@@ -194,15 +231,20 @@ class _PatientInfo1State extends State<PatientInfo1> {
                 ),
               ),
               Padding(
+                padding: EdgeInsets.symmetric(vertical:8),
+                child: Text (birthday),
+              ),
+              Padding(
                 padding: EdgeInsets.symmetric(vertical: 5, horizontal: 24),
                 child: TextField(
                   controller: ageController,
                   onChanged: (text) {
                     setState(() {
                       agestring = text;
+                      
                     });
                   },
-                  keyboardType: TextInputType.text,
+                  keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                       labelText: 'Age',
                       labelStyle:
@@ -218,6 +260,7 @@ class _PatientInfo1State extends State<PatientInfo1> {
                     context,
                     MaterialPageRoute(builder: (context) => PatientInfo2()),
                   );
+                  _persistPatientInfo1();
                 },
               ),
               Padding(
@@ -246,6 +289,7 @@ class _PatientInfo1State extends State<PatientInfo1> {
               ),
             ],
           ),
+          ]
         ));
   }
 }

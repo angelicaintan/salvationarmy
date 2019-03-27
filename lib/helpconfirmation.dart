@@ -14,17 +14,17 @@ class _HelpConfirmation extends State<HelpConfirmation> {
       appBar: AppBar(
         title: Text('Help'),
       ),
-      body: Container(
-        width: MediaQuery.of(context).size.width,
-        child: Column(
-          children: <Widget>[
-            SizedBox(
-              width: MediaQuery.of(context).size.width*0.75,
-              height: MediaQuery.of(context).size.height*0.5,
+      body: ListView(
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+            child: Text(
+              'Clicking “Add record” will take you to Home. Here, you can add record of the next person that your group encounters. You can convert it to a spreadsheet. Clicking send & log out will send the converted files (CSV) to the staff members at Salvation Army Office and you will be logged out from the system.',
+              style: TextStyle(fontSize: 24),
             ),
-          ],
-        ),
-      )
+          ),
+        ],
+      ),
     );
   }
 }

@@ -14,17 +14,17 @@ class _HelpNewRecordState extends State<HelpNewRecord> {
       appBar: AppBar(
         title: Text('Help'),
       ),
-      body: Container(
-        width: MediaQuery.of(context).size.width,
-        child: Column(
-          children: <Widget>[
-            SizedBox(
-              width: MediaQuery.of(context).size.width*0.75,
-              height: MediaQuery.of(context).size.height*0.5,
+      body: ListView(
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+            child: Text(
+              'To start a new record, please press the “New Record” button. If there is no more data to be inputted, please press the “Finish Outreach” button. \nRemarks: Once you press “Finish Outreach” button, you cannot add more or edit the files!',
+              style: TextStyle(fontSize: 24),
             ),
-          ],
-        ),
-      )
+          ),
+        ],
+      ),
     );
   }
 }

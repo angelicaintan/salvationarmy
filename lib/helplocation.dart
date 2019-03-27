@@ -14,17 +14,17 @@ class _HelpLocationState extends State<HelpLocation> {
       appBar: AppBar(
         title: Text('Help'),
       ),
-      body: Container(
-        width: MediaQuery.of(context).size.width,
-        child: Column(
-          children: <Widget>[
-            SizedBox(
-              width: MediaQuery.of(context).size.width*0.75,
-              height: MediaQuery.of(context).size.height*0.5,
+      body: ListView(
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+            child: Text(
+              'Pinpoint the person’s location via GPS or manually input it in the box above the map.',
+              style: TextStyle(fontSize: 24),
             ),
-          ],
-        ),
-      )
+          ),
+        ],
+      ),
     );
   }
 }

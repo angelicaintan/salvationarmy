@@ -14,17 +14,17 @@ class _HelpPatientInfo3State extends State<HelpPatientInfo3> {
       appBar: AppBar(
         title: Text('Help'),
       ),
-      body: Container(
-        width: MediaQuery.of(context).size.width,
-        child: Column(
-          children: <Widget>[
-            SizedBox(
-              width: MediaQuery.of(context).size.width*0.75,
-              height: MediaQuery.of(context).size.height*0.5,
+      body: ListView(
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+            child: Text(
+              'You can add photos of the person’s physical ailments or previous medical appointments/referrals in the ‘Additional files or photos’ section.',
+              style: TextStyle(fontSize: 24),
             ),
-          ],
-        ),
-      )
+          ),
+        ],
+      ),
     );
   }
 }

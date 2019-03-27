@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'newrecord.dart';
 import 'helpmain.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() => runApp(MyApp());
 
@@ -49,13 +52,33 @@ class _MyHomePageState extends State<MyHomePage> {
   void _dismissKeyboard() {
     FocusScope.of(context).requestFocus(new FocusNode());
   }
+
   String username;
   String email;
   String accesscode;
+  int test;
 
   final usernameController = TextEditingController();
   final emailController = TextEditingController();
   final accesscodeController = TextEditingController();
+
+  var records = Firestore.instance.collection('Records').document();
+
+  _persistLogin() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('access-code', accesscode);
+    prefs.setString('user-name', accesscode);
+    prefs.setString('user-contact', accesscode);
+  }
+
+  Future<Null> _saveLogin() async {
+    Map<String, dynamic> loginMap = {
+      'access-code': '${accesscodeController.text}',
+      'user-name': '${usernameController.text}',
+      'user-contact': '${emailController.text}',
+    };
+    records.setData(loginMap);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,92 +89,95 @@ class _MyHomePageState extends State<MyHomePage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: GestureDetector(
-        onTap: () => _dismissKeyboard(),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Image.asset('assets/images/logo.png'),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-              child: TextField(
-                controller: accesscodeController,
-                  onChanged: (text) {
-                    accesscode = text;
-                  },
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                    labelText: 'Access Code',
-                    labelStyle:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8))),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-              child: TextField(
-                controller: usernameController,
-                  onChanged: (text) {
-                    username = text;
-                  },
-                keyboardType: TextInputType.text,
-                decoration: InputDecoration(
-                    labelText: 'Name',
-                    labelStyle:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8))),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-              child: TextField(
-                controller: emailController,
-                  onChanged: (text) {
-                    email = text;
-                  },
-                keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(
-                    labelText: 'Email Address',
-                    labelStyle:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8))),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 8),
-            ),
-            RaisedButton(
-              child: Text('Go!'),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => NewRecord()),
-                );
-              },
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 8),
-            ),
-            RaisedButton(
-              child: Text('?'),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => HelpMain()),
-                );
-              },
-            ),
-          ],
+        appBar: AppBar(
+          // Here we take the value from the MyHomePage object that was created by
+          // the App.build method, and use it to set our appbar title.
+          title: Text(widget.title),
         ),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
+        body: ListView(children: <Widget>[
+          GestureDetector(
+            onTap: () => _dismissKeyboard(),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Image.asset('assets/images/logo.png'),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                  child: TextField(
+                    controller: accesscodeController,
+                    onChanged: (text) {
+                      accesscode = text;
+                    },
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                        labelText: 'Access Code',
+                        labelStyle: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 20),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8))),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                  child: TextField(
+                    controller: usernameController,
+                    onChanged: (text) {
+                      username = text;
+                    },
+                    keyboardType: TextInputType.text,
+                    decoration: InputDecoration(
+                        labelText: 'Name',
+                        labelStyle: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 20),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8))),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                  child: TextField(
+                    controller: emailController,
+                    onChanged: (text) {
+                      email = text;
+                    },
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: InputDecoration(
+                        labelText: 'Email Address',
+                        labelStyle: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 20),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8))),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 8),
+                ),
+                RaisedButton(
+                  child: Text('Go!'),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => NewRecord()),
+                    );
+                    _persistLogin();
+                    // _saveLogin();
+                  },
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 8),
+                ),
+                RaisedButton(
+                  child: Text('?'),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => HelpMain()),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ), // This trailing comma makes auto-formatting nicer for build methods.
+        ]));
   }
 }

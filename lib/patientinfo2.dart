@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'helppatientinfo2.dart';
 import 'patientinfo3.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PatientInfo2 extends StatefulWidget {
   @override
@@ -31,6 +33,23 @@ class _PatientInfo2State extends State<PatientInfo2> {
   final respirationrateController = TextEditingController();
   final additionalinfoController = TextEditingController();
 
+  var records = Firestore.instance.collection('Records').document();
+
+  _persistPatientInfo2() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('heart-rate', heartrate);
+    prefs.setString('blood-pressure', bloodpressure);
+    prefs.setString('blood-glucose', bloodglucose);
+    prefs.setString('body-height', bodyheight);
+    prefs.setString('body-weight', bodyweight);
+    prefs.setString('BMI', bmi);
+    prefs.setString('respiration-rate', respirationrate);
+    prefs.setBool('smoking', _smoking);
+    prefs.setBool('alcohol', _alcohol);
+    prefs.setBool('drugs', _drugs);
+    prefs.setString('additional-info1', additionalinfo);
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -39,6 +58,11 @@ class _PatientInfo2State extends State<PatientInfo2> {
       body: ListView(
         children: <Widget>[
           Row(children: <Widget>[
+            Container(
+              decoration: BoxDecoration (
+                //image: new DecorationImage(image: AssetImage('assets/icons/Slide1.PNG')),
+              )
+            ),
             Text(
               'Heart Rate',
               style: TextStyle(fontSize: 12),
@@ -235,14 +259,15 @@ class _PatientInfo2State extends State<PatientInfo2> {
             ),
           ),
           RaisedButton(
-                child: Text('Next'),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => PatientInfo3()),
-                  );
-                },
-              ),
+            child: Text('Next'),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => PatientInfo3()),
+              );
+              _persistPatientInfo2();
+            },
+          ),
           Padding(
             padding: EdgeInsets.symmetric(vertical: 8, horizontal: 5),
             child: RaisedButton(
