@@ -164,7 +164,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   padding: EdgeInsets.symmetric(vertical: 8),
                 ),
                 RaisedButton(
-                  child: Text('Go!'),
+                  child: Text('Go!',),
                   onPressed: () {
                     Navigator.push(
                       context,
