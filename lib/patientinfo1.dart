@@ -4,6 +4,7 @@ import 'patientinfo2.dart';
 import 'newrecord.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'main.dart';
 
 class PatientInfo1 extends StatefulWidget {
   @override
@@ -11,6 +12,10 @@ class PatientInfo1 extends StatefulWidget {
 }
 
 class _PatientInfo1State extends State<PatientInfo1> {
+  void _dismissKeyboard() {
+    FocusScope.of(context).requestFocus(new FocusNode());
+  }
+
   String name;
   String contact;
   bool cssa;
@@ -19,6 +24,7 @@ class _PatientInfo1State extends State<PatientInfo1> {
   String birthday = ' ';
   String agestring;
   int age;
+  bool reject = false;
 
   double agefull;
 
@@ -87,6 +93,7 @@ class _PatientInfo1State extends State<PatientInfo1> {
     prefs.setString('HKID', hkid);
     prefs.setString('birthday', birthday);
     prefs.setString('age', agestring);
+    prefs.setBool('reject', reject);
   }
 
   _printLatestValue() {
@@ -108,188 +115,195 @@ class _PatientInfo1State extends State<PatientInfo1> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Personal Information'),
-        ),
-        body: ListView(
-          children: <Widget> [
-          Column(
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 5, horizontal: 24),
-                child: TextField(
-                  controller: nameController,
-                  onChanged: (text) {
-                    name = text;
-                  },
-                  keyboardType: TextInputType.text,
-                  decoration: InputDecoration(
-                      labelText: 'Name',
-                      labelStyle:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8))),
-                ),
-              ),
-              Row(
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-                    child: Text('Gender : F'),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-                    child: Radio(
-                      groupValue: _genderValue,
-                      value: 0,
-                      onChanged: _genderChange,
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-                    child: Text('M'),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-                    child: Radio(
-                      groupValue: _genderValue,
-                      value: 1,
-                      onChanged: _genderChange,
-                    ),
-                  ),
-                ],
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 5, horizontal: 24),
-                child: TextField(
-                  controller: contactController,
-                  onChanged: (text) {
-                    contact = text;
-                  },
-                  keyboardType: TextInputType.text,
-                  decoration: InputDecoration(
-                      labelText: 'Contact',
-                      labelStyle:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8))),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 5, horizontal: 24),
-                child: TextField(
-                  controller: hkidController,
-                  onChanged: (text) {
-                    hkid = text;
-                  },
-                  keyboardType: TextInputType.text,
-                  decoration: InputDecoration(
-                      labelText: 'HKID',
-                      labelStyle:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8))),
-                ),
-              ),
-              Row(
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-                    child: Text('CSSA : Y'),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-                    child: Radio(
-                      groupValue: _cssaValue,
-                      value: 0,
-                      onChanged: _cssaChange,
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-                    child: Text('N'),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-                    child: Radio(
-                      groupValue: _cssaValue,
-                      value: 1,
-                      onChanged: _cssaChange,
-                    ),
-                  ),
-                ],
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-                child: Text('Date of Birth'),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 8),
-                child: RaisedButton(
-                  onPressed: () => _selectDate(context),
-                  child: Text('Select date'),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical:8),
-                child: Text (birthday),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 5, horizontal: 24),
-                child: TextField(
-                  controller: ageController,
-                  onChanged: (text) {
-                    setState(() {
-                      agestring = text;
-                      
-                    });
-                  },
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                      labelText: 'Age',
-                      labelStyle:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8))),
-                ),
-              ),
-              RaisedButton(
-                child: Text('Next'),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => PatientInfo2()),
-                  );
-                  _persistPatientInfo1();
-                },
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 8),
-              ),
-              RaisedButton(
-                child: Text('Reject'),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => NewRecord()),
-                  );
-                },
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 8, horizontal: 15),
-              ),
-              RaisedButton(
-                child: Text('?'),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => HelpPatientInfo1()),
-                  );
-                },
-              ),
-            ],
+        appBar: AppBar(actions: <Widget>[
+          FlatButton(
+            child: Text('logout',
+                style: TextStyle(fontSize: 18, color: Colors.white)),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => MyApp()),
+              );
+            },
           ),
-          ]
-        ));
+          IconButton(
+            icon: Icon(Icons.help_outline),
+            color: Colors.white,
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => HelpPatientInfo1()),
+              );
+            },
+          ),
+        ]),
+        body: ListView(children: <Widget>[
+          GestureDetector(
+            onTap: () => _dismissKeyboard(),
+            child: Column(
+              children: <Widget>[
+                Padding(
+                  padding:
+                      EdgeInsets.only(left: 24, right: 24, top: 24, bottom: 5),
+                  child: TextField(
+                    controller: nameController,
+                    onChanged: (text) {
+                      name = text;
+                    },
+                    keyboardType: TextInputType.text,
+                    decoration: InputDecoration(
+                        labelText: 'Name',
+                        labelStyle: TextStyle(fontSize: 16),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8))),
+                  ),
+                ),
+                Row(
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.only(left: 24),
+                      child: Text('Gender:       F',
+                          style: TextStyle(fontSize: 16)),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(10),
+                      child: Radio(
+                        groupValue: _genderValue,
+                        value: 0,
+                        onChanged: _genderChange,
+                      ),
+                    ),
+                    Text('M', style: TextStyle(fontSize: 16)),
+                    Padding(
+                      padding: EdgeInsets.all(10),
+                      child: Radio(
+                        groupValue: _genderValue,
+                        value: 1,
+                        onChanged: _genderChange,
+                      ),
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 5, horizontal: 24),
+                  child: TextField(
+                    controller: contactController,
+                    onChanged: (text) {
+                      contact = text;
+                    },
+                    keyboardType: TextInputType.text,
+                    decoration: InputDecoration(
+                        labelText: 'Contact',
+                        labelStyle: TextStyle(fontSize: 16),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8))),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 5, horizontal: 24),
+                  child: TextField(
+                    controller: hkidController,
+                    onChanged: (text) {
+                      hkid = text;
+                    },
+                    keyboardType: TextInputType.text,
+                    decoration: InputDecoration(
+                        labelText: 'HKID',
+                        labelStyle: TextStyle(fontSize: 16),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8))),
+                  ),
+                ),
+                Row(
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.only(left: 24),
+                      child: Text('CSSA:         Y',
+                          style: TextStyle(fontSize: 16)),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(10),
+                      child: Radio(
+                        groupValue: _cssaValue,
+                        value: 0,
+                        onChanged: _cssaChange,
+                      ),
+                    ),
+                    Text('N', style: TextStyle(fontSize: 16)),
+                    Padding(
+                      padding: EdgeInsets.all(10),
+                      child: Radio(
+                        groupValue: _cssaValue,
+                        value: 1,
+                        onChanged: _cssaChange,
+                      ),
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+                  child: Text('Date of Birth', style: TextStyle(fontSize: 16)),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 8),
+                  child: RaisedButton(
+                    onPressed: () => _selectDate(context),
+                    child: Text('Select date'),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 8),
+                  child: Text(birthday, style: TextStyle(fontSize: 16)),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(24),
+                  child: TextField(
+                    controller: ageController,
+                    onChanged: (text) {
+                      setState(() {
+                        agestring = text;
+                      });
+                    },
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                        labelText: 'Age',
+                        labelStyle: TextStyle(fontSize: 16),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8))),
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    RaisedButton(
+                      child: Text('Reject'),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => NewRecord()),
+                        );
+                        setState(() {
+                          reject = true;
+                        });
+                      },
+                    ),
+                    Padding(padding: EdgeInsets.symmetric(horizontal: 15)),
+                    RaisedButton(
+                      child: Text('Next'),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => PatientInfo2()),
+                        );
+                        _persistPatientInfo1();
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ]));
   }
 }

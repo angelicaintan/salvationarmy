@@ -12,9 +12,12 @@ class Location extends StatefulWidget {
 }
 
 class _LocationState extends State<Location> {
-
+  void _dismissKeyboard() {
+    FocusScope.of(context).requestFocus(new FocusNode());
+  }
+  
   final locationController = TextEditingController();
-  String location = ' ';
+  String location;
 
   Completer<GoogleMapController> _controller = Completer();
   static final CameraPosition _kdefaultLocation = CameraPosition(
@@ -37,28 +40,60 @@ class _LocationState extends State<Location> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Location'),
+          actions: <Widget>[
+            FlatButton(
+            child: Text('logout', style: TextStyle(fontSize: 18, color: Colors.white)),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => MyApp()),
+              );
+            },
+          ),
+              IconButton(
+                icon: Icon(Icons.help_outline),
+                color: Colors.white,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => HelpLocation()),
+                  );
+                },
+              ),
+              
+            ]
         ),
         body: ListView(children: <Widget>[
-          Column(
+          GestureDetector(
+            onTap: () => _dismissKeyboard(),
+          child: Column(
             children: <Widget>[
-              TextField(
-                  controller: locationController,
-                  onChanged: (text) {
-                    location = position.toString();
-                  },
-                  keyboardType: TextInputType.text,
-                  decoration: InputDecoration(
-                      labelText: location,
+              Padding (
+                padding:EdgeInsets.only(top:30)
+              ),
+              SizedBox(
+                height: 50,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(color: Colors.grey),
+                  child: TextField(
+                    controller: locationController,
+                    onChanged: (text) {
+                      location = position.toString();
+                    },
+                    keyboardType: TextInputType.text,
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.all(10),
+                      labelText: location ?? 'type location',
                       labelStyle:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8))),
+                    ),
+                  ),
                 ),
+              ),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                 child: SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.75,
+                  width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height * 0.5,
                   child: GoogleMap(
                     mapType: MapType.normal,
@@ -70,22 +105,10 @@ class _LocationState extends State<Location> {
                 ),
               ),
               RaisedButton(
-                child: Text('Log Out'),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => MyApp()),
-                  );
-                },
-              ),
-              RaisedButton(
                 child: Text('Locate me'),
                 onPressed: () {
                   _getCurrentPosition();
                 },
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 8),
               ),
               RaisedButton(
                 child: Text('Next'),
@@ -99,16 +122,8 @@ class _LocationState extends State<Location> {
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 8),
               ),
-              RaisedButton(
-                child: Text('?'),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => HelpLocation()),
-                  );
-                },
-              ),
             ],
+          ),
           ),
         ]));
   }

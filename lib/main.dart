@@ -90,10 +90,21 @@ class _MyHomePageState extends State<MyHomePage> {
     // than having to individually change instances of widgets.
     return Scaffold(
         appBar: AppBar(
-          // Here we take the value from the MyHomePage object that was created by
-          // the App.build method, and use it to set our appbar title.
-          title: Text(widget.title),
-        ),
+            // Here we take the value from the MyHomePage object that was created by
+            // the App.build method, and use it to set our appbar title.
+            title: Text('Welcome'),
+            actions: <Widget>[
+              IconButton(
+                icon: Icon(Icons.help_outline),
+                color: Colors.white,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => HelpMain()),
+                  );
+                },
+              ),
+            ]),
         body: ListView(children: <Widget>[
           GestureDetector(
             onTap: () => _dismissKeyboard(),
@@ -165,15 +176,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 8),
-                ),
-                RaisedButton(
-                  child: Text('?'),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => HelpMain()),
-                    );
-                  },
                 ),
               ],
             ),
