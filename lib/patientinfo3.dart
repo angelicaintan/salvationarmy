@@ -68,6 +68,7 @@ class _PatientInfo3State extends State<PatientInfo3> {
   void _selectAndUploadPicture() async{
     await _selectPicture();
     await _uploadPicture();
+    numfiles++;
   }
 
   void _takeAndUploadPicture() async{

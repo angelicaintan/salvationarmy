@@ -25,9 +25,17 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.red,
       ),
-      home: MyHomePage(title: 'Salvation Army'),
+      home: LevelUpWidget(records: [], child: MyHomePage(title: 'Salvation Army')),
     );
   }
+}
+
+class LevelUpWidget extends InheritedWidget {
+  List records;
+
+  LevelUpWidget({this.records, Widget child}) : super(child: child);
+  @override
+  bool updateShouldNotify(InheritedWidget oldWidget) => true;
 }
 
 class MyHomePage extends StatefulWidget {
@@ -164,7 +172,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   padding: EdgeInsets.symmetric(vertical: 8),
                 ),
                 RaisedButton(
-                  child: Text('Go!',),
+                  child: Text(
+                    'Go!',
+                  ),
                   onPressed: () {
                     Navigator.push(
                       context,
